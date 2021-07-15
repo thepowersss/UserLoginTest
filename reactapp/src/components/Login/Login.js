@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import './Login.css';
 
 async function loginUser(credentials) {
+  console.log("login credentials: " + credentials);
  return fetch('http://localhost:8080/login', {
    method: 'POST',
    headers: {
@@ -14,6 +15,7 @@ async function loginUser(credentials) {
 }
 
 export default function Login({ setToken }) {
+  console.log("reached");
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
 
@@ -28,7 +30,7 @@ export default function Login({ setToken }) {
 
   return(
     <div className="login-wrapper">
-      <h1>Please Log In</h1>
+      <h1>Log In</h1>
       <form onSubmit={handleSubmit}>
         <label>
           <p>Username</p>
