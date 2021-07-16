@@ -9,35 +9,102 @@ const app = express();
 app.use(cors());
 app.use(bodyParser());
 
+// for use as verification token
+// called in Login.js's Login()
 app.use('/login', (req, res) => {
   res.send({
     token: 'authenticated'
   });
 });
 
-app.post('/save-data', (req, res) => {
-  var body = req.body;
-  console.log(body);
+// responds with a JSON object either {loginstatus:true} or {loginstatus:false}
+// checks if given login credentials matches with anything in userData.txt
+app.use('/verify', (req, res) => {
   fs.readFile('userData/userData.txt', 'utf8' , (err, data) => {
     if (err) {
       console.error(err)
       return
     }
     console.log(data)
-  })
-  savetoFolder(body, function(err) {
+    // loop through keys:value in userData.txt
+    // if there's a match with req.body, then send true
+    // if no match, then send false
+  });
+});
+
+
+// Add Access Control Allow Origin headers
+app.use((req, res, next) => {
+  console.log("access control origin (header adjusted)");
+  res.setHeader("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  next();
+});
+
+// returns
+app.post('/save-data', (req, res) => {
+  var usernameMatches = undefined;
+  var body = req.body;
+  console.log("body recieved");
+  console.log(body);
+  // begin reading the userData file
+  fs.readFile('userData/userData.txt', 'utf8' , (err, data) => {
+    // if there's an error with reading the file
     if (err) {
-      console.log('User not saved');
-      console.log(err);
+      console.error(err)
+      res.end();
       return;
     }
-    console.log('User saved');
+
+    // read line by line to see if username already exists
+    var usersJsonArr = []; // users in userData get temp stored here while reading
+    var linesArr = data.split('\n'); // stores each user as a string in temp array;
+    for (var i = 0; i < linesArr.length; i++) {
+      if (linesArr[i]=='') { // if the line is an empty string, we've reached the end
+        console.log("no username match, stop");
+        usernameMatches = false;
+        break;
+      }
+      usersJsonArr.push(JSON.parse(linesArr[i])); // load usernames into
+      // console.log("loop " + i);
+      // console.log(body.username);
+      // console.log(jsonArr[i].username);
+      if (body.username==usersJsonArr[i].username) { // username matches
+        console.log("username matches ERRR")
+        usersJsonArr = []; // reset the users array
+        linesArr = []; // reset the line array
+        usernameMatches = true;
+        break;
+      } else { // username doesn't match
+        console.log("no username match, keep going")
+      }
+    }
+    // after reading userData, return result
+    console.log("username match: " + usernameMatches);
+    if (!usernameMatches) {
+      savetoFolder(body, function(err) {
+        // error with saving user
+        if (err) {
+          console.log('User not saved');
+          console.log(err);
+          res.end();
+          return;
+        }
+        console.log('User saved');
+        res.end();
+      });
+    };
+    // otherwise registerSuccess is false
+    res.end();
   });
 });
 
 function savetoFolder(data, callback) {
   fs.appendFile('userData/userData.txt', JSON.stringify(data)+'\n', callback);
-  //fs.writeFile('userData/userData.txt', JSON.stringify(data), callback);
+  //fs.writeFile('userData/userData.txt', data+'\n', callback);
 }
 
 app.get('/', function (req, res) {
