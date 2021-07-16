@@ -16,11 +16,15 @@ app.use('/login', (req, res) => {
 });
 
 app.post('/save-data', (req, res) => {
-  //res.send("save-data called");
   var body = req.body;
   console.log(body);
-  var users = fs.readFile('userData/userData.txt', 'utf8');
-  console.log(body.get(0));
+  fs.readFile('userData/userData.txt', 'utf8' , (err, data) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    console.log(data)
+  })
   savetoFolder(body, function(err) {
     if (err) {
       console.log('User not saved');
@@ -29,13 +33,11 @@ app.post('/save-data', (req, res) => {
     }
     console.log('User saved');
   });
-  // var xhr = new XMLHttpRequest();
-  // xhr.open("POST", "SERVER.SCRIPT");
-  // xhr.send(data);
 });
 
 function savetoFolder(data, callback) {
-  fs.writeFile('userData/userData.txt', JSON.stringify(data), callback);
+  fs.appendFile('userData/userData.txt', JSON.stringify(data)+'\n', callback);
+  //fs.writeFile('userData/userData.txt', JSON.stringify(data), callback);
 }
 
 app.get('/', function (req, res) {

@@ -14,6 +14,25 @@ async function loginUser(credentials) {
    .then(data => data.json())
 }
 
+async function verify(credentials) {
+  return await fetch('http://localhost:8080/verify', {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: "verify"
+  })
+    .then(data => data.json());
+}
+
+// displays a login failure on screen
+/*
+async function loginFailure() {
+  console.log("login failed");
+  // display login failure
+}
+*/
+
 export default function Login({ setToken }) {
   console.log("reached");
   const [username, setUserName] = useState();
@@ -25,6 +44,15 @@ export default function Login({ setToken }) {
       username,
       password
     });
+    /*
+    // check if username:password matches userdata
+    var status = verify({username, password})
+    if (status=={loginstatus:true}) {
+      setToken(token);
+    } else {
+      loginFailure();
+    }
+    */
     setToken(token);
   }
 
