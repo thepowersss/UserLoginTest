@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
+// will disable later
+// enables login token
 async function registerUser(user) {
-  console.log("register user: " + user);
+  console.log(user);
   return fetch('http://localhost:8080/login', {
    method: 'POST',
    headers: {
@@ -11,6 +13,24 @@ async function registerUser(user) {
    body: JSON.stringify(user)
  })
    .then(data => data.json())
+}
+
+// post user data to server
+async function saveUserInfo(userInfo) {
+  console.log("userinfo");
+  console.log(userInfo);
+  return fetch('http://localhost:8080/save-data', {
+   method: 'POST',
+   headers: {
+     'Content-Type': 'application/json'
+   },
+   body: JSON.stringify(userInfo)
+ })
+   .then(data => data.json())
+}
+
+async function registerSuccess() {
+  console.log("user created!");
 }
 
 export default function Register({ setToken }) {
@@ -23,7 +43,8 @@ export default function Register({ setToken }) {
       username,
       password
     });
-    setToken(token);
+    registerSuccess();
+    saveUserInfo({username, password});
   }
 
   return(

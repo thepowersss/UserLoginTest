@@ -9,11 +9,10 @@ import useToken from './useToken';
 
 function App() {
   const { token, setToken } = useToken();
+  console.log(token);
+  console.log(setToken);
 
   if(!token) {
-      /*
-      return <Login setToken={setToken} />
-      */
       console.log("no token")
       return <div>
         <Login setToken={setToken} />
