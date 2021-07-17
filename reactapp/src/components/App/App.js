@@ -24,6 +24,8 @@ function App() {
     return <User />
   }
 
+// unreachable
+/*
   return (
     <div className="wrapper">
       <h1>Application</h1>
@@ -39,13 +41,6 @@ function App() {
             <Register setToken={setToken} />
           </Route>
         </Switch>
-        /*
-        <Switch>
-          <Route path="/register">
-            <Register setToken={setToken} />
-          </Route>
-        </Switch>
-        */
         <Switch>
           <Route path="/login">
             <Login setToken={setToken} />
@@ -54,6 +49,7 @@ function App() {
       </BrowserRouter>
     </div>
   );
+  */
 }
 
 export default App;

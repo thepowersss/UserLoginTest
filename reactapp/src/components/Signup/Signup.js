@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 async function saveUserInfo(userInfo) {
   console.log("userinfo toSend");
   console.log(userInfo);
-  return fetch('http://localhost:8080/save-data', {
+  const response = await fetch('http://localhost:8080/save-data', {
     //mode: 'no-cors', // no-cors, *cors, same-origin
     method: 'POST',
     headers: {
@@ -14,7 +14,7 @@ async function saveUserInfo(userInfo) {
     },
     body: JSON.stringify(userInfo)
  })
-   .then(data => data.json())
+ return response;
 }
 
 export default function Register({ setToken }) {
@@ -23,7 +23,8 @@ export default function Register({ setToken }) {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    saveUserInfo({username, password}); // save user to userData.txt
+    var result = saveUserInfo({username, password}); // save user to userData.txt
+    console.log(result);
   }
 
   return(
@@ -32,11 +33,19 @@ export default function Register({ setToken }) {
       <form onSubmit={handleSubmit}>
         <label>
           <p>Username</p>
-          <input type="text" onChange={e => setUserName(e.target.value)} />
+          <input
+            type="text"
+            pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,15}$"
+            title="A proper username must begin with a letter, contain letters, numbers, scores and stops, and have between 3 and 15 characters long"
+            onChange={e => setUserName(e.target.value)} />
         </label>
         <label>
           <p>Password</p>
-          <input type="password" onChange={e => setPassword(e.target.value)} />
+          <input
+            type="password"
+            pattern="[a-zA-Z0-9]{6,15}"
+            title="A valid password must be composed by letters and/or numbers and have a length between 6 and 15 characters"
+            onChange={e => setPassword(e.target.value)} />
         </label>
         <div>
           <button type="submit">Submit</button>

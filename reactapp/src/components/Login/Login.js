@@ -3,38 +3,20 @@ import PropTypes from 'prop-types';
 import './Login.css';
 
 async function loginUser(credentials) {
+  console.log("credentials toSend");
   console.log(credentials);
-  return fetch('http://localhost:8080/login', {
-   method: 'POST',
-   headers: {
-     'Content-Type': 'application/json'
-   },
-   body: JSON.stringify(credentials)
- })
-   .then(data => data.json())
-}
-
-async function verify(credentials) {
-  return await fetch('http://localhost:8080/verify', {
-    method: 'GET',
+  const response = await fetch('http://localhost:8080/verify', {
+    //mode: 'no-cors', // no-cors, *cors, same-origin
+    method: 'POST',
     headers: {
-      'Content-Type': 'application/json'
+     'Content-Type': 'application/json'
     },
-    body: "verify"
-  })
-    .then(data => data.json());
+    body: JSON.stringify(credentials)
+ })
+ return response;
 }
-
-// displays a login failure on screen
-/*
-async function loginFailure() {
-  console.log("login failed");
-  // display login failure
-}
-*/
 
 export default function Login({ setToken }) {
-  console.log("reached");
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
 
@@ -44,15 +26,6 @@ export default function Login({ setToken }) {
       username,
       password
     });
-    /*
-    // check if username:password matches userdata
-    var status = verify({username, password})
-    if (status=={loginstatus:true}) {
-      setToken(token);
-    } else {
-      loginFailure();
-    }
-    */
     setToken(token);
   }
 
@@ -62,11 +35,19 @@ export default function Login({ setToken }) {
       <form onSubmit={handleSubmit}>
         <label>
           <p>Username</p>
-          <input type="text" onChange={e => setUserName(e.target.value)} />
+          <input
+            type="text"
+            pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,15}$"
+            title="A proper username must begin with a letter, contain letters, numbers, scores and stops, and have between 3 and 15 characters long"
+            onChange={e => setUserName(e.target.value)} />
         </label>
         <label>
           <p>Password</p>
-          <input type="password" onChange={e => setPassword(e.target.value)} />
+          <input
+            type="password"
+            pattern="[a-zA-Z0-9]{6,15}"
+            title="A valid password must be composed by letters and/or numbers and have a length between 6 and 15 characters"
+            onChange={e => setPassword(e.target.value)} />
         </label>
         <div>
           <button type="submit">Submit</button>
