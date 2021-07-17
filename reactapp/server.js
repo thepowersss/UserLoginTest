@@ -50,7 +50,8 @@ app.post('/verify', (req, res) => {
       && body.password==usersJsonArr[i].password) { // username and password matches
         console.log("login verified");
         res.send({
-          token: 'authenticated'
+          //token: 'authenticated'
+          token: body.username
         });
         //res.end();
         break;

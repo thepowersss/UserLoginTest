@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+// DO NOT TOUCH
+// EVERYTHING HERE IS FINE
 export default function useToken() {
   const getToken = () => {
     const tokenString = sessionStorage.getItem('token');
