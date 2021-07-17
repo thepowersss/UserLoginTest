@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import validator from 'validator';
 
 // post user data to server
 // returns the response of the fetch
@@ -18,8 +19,23 @@ async function saveUserInfo(userInfo) {
 }
 
 export default function Register({ setToken }) {
+  // save username and password
   const [username, setUserName] = useState();
   const [password, setPassword] = useState();
+
+  // save email validation and error
+  const [emailError, setEmailError] = useState('')
+  const validateEmail = (e) => {
+    var email = e.target.value
+
+    if (validator.isEmail(email)) {
+      setEmailError('Valid Email :)')
+      setUserName(e.target.value)
+    } else {
+      setEmailError('Enter valid Email!')
+    }
+  }
+
 
   const handleSubmit = async e => {
     e.preventDefault();
@@ -32,12 +48,22 @@ export default function Register({ setToken }) {
       <h1>Create an Account</h1>
       <form onSubmit={handleSubmit}>
         <label>
-          <p>Username</p>
+          <p>Email</p>
           <input
             type="text"
-            pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,15}$"
-            title="A proper username must begin with a letter, contain letters, numbers, scores and stops, and have between 3 and 15 characters long"
-            onChange={e => setUserName(e.target.value)} />
+            id="userEmail"
+            onChange={(e) => validateEmail(e)}/>
+            {
+            // old code validates usernames, not emails
+            //pattern="^[a-zA-Z][a-zA-Z0-9-_\.]{3,15}$"
+            //title="A proper username must begin with a letter, contain letters, numbers, scores and stops, and have between 3 and 15 characters long"
+            //onChange={e => setUserName(e.target.value)}
+            }
+            <br/>
+            <span style={{
+            fontWeight: 'bold',
+            color: 'red',
+            }}>{emailError}</span>
         </label>
         <label>
           <p>Password</p>
