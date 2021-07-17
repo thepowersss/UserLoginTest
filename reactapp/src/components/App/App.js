@@ -1,5 +1,7 @@
-//import React, { useState } from 'react';
+import React, { useState } from 'react';
 //import { BrowserRouter, Route, Switch } from 'react-router-dom';
+// TODO follow this tutorial for email validation
+// https://www.geeksforgeeks.org/how-to-validate-an-email-in-reactjs/
 
 import './App.css';
 import User from './user';

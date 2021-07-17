@@ -41,7 +41,7 @@ app.post('/verify', (req, res) => {
         break;
       }
       usersJsonArr.push(JSON.parse(linesArr[i])); // load users
-      console.log("big check")
+      //console.log("big check")
       // console.log(body.username);
       // console.log(usersJsonArr[i].username);
       // console.log(body.password);
